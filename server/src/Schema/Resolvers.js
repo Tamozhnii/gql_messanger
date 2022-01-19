@@ -1,3 +1,4 @@
+const { pubsub } = require('./../pubSub')
 /**Преобразователи GQL для запросов */
 const resolvers = {
   Query: {
@@ -25,10 +26,19 @@ const resolvers = {
         return user
       }
     },
-    sendMessage: async (_, { text }, { dataSources }) => {},
+    sendMessage: async (_, { text }, { dataSources }) => {
+      pubsub.publish('MESSAGE_ADDED', { messageAdded: text })
+      return postController.sendMessage(text)
+    },
     editMessage: async (_, { messageId, text }, { dataSources }) => {},
     removeMessage: async (_, { messageId }, { dataSources }) => {},
   },
+  // Subscription: {
+  //   messageAdded: {
+  //     // More on pubsub below
+  //     subscribe: () => pubsub.asyncIterator(['MESSAGE_ADDED']),
+  //   },
+  // },
 }
 
 module.exports = resolvers

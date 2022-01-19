@@ -1,14 +1,20 @@
 const { ApolloServer } = require('apollo-server-express')
+const { execute, subscribe } = require('graphql')
+const { SubscriptionServer } = require('subscriptions-transport-ws')
+const { makeExecutableSchema } = require('@graphql-tools/schema')
+const { createServer } = require('http')
+const express = require('express')
+
+const { validate } = require('isemail')
+
 const { DB_API } = require('./db_context')
 const { sequelize } = require('./../models')
 
 const typeDefs = require('./Schema/TypeDefs')
 const resolvers = require('./Schema/Resolvers')
 
-const express = require('express')
-const IsEmail = require('isemail')
-
 const app = express()
+const httpServer = createServer(app)
 
 const store = sequelize.models
 
@@ -18,17 +24,50 @@ const context = async ({ req }) => {
   /**Преобразовываем токен в строку (обратно в email) */
   const email = Buffer.from(auth, 'base64').toString('ascii')
   /**Проверка валидности email */
-  if (!IsEmail.validate(email)) return { user: null }
+  if (!validate(email)) return { user: null }
   /**Находим пользователя*/
   const user = await store.Users.findOne({ where: { email } })
   return { user: user ? { ...user.dataValues } : null }
 }
 
-const server = new ApolloServer({
+const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
   context,
   dataSources: () => ({ dbAPI: new DB_API({ store }) }),
+})
+
+const subscriptionServer = SubscriptionServer.create(
+  {
+    schema,
+    execute,
+    subscribe,
+    onConnect(connectionParams, webSocket, context) {
+      console.log('Connected!')
+    },
+    onDisconnect(webSocket, context) {
+      console.log('Disconnected!')
+    },
+  },
+  {
+    server: httpServer,
+    path: '/graphql',
+  }
+)
+
+const server = new ApolloServer({
+  schema,
+  plugins: [
+    {
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            subscriptionServer.close()
+          },
+        }
+      },
+    },
+  ],
 })
 
 server
@@ -37,7 +76,8 @@ server
     server.applyMiddleware({ app })
   })
   .then(() => {
-    app.listen({ port: 3001 }, () => {
-      console.log(`http://localhost:3001${server.graphqlPath}`)
+    const PORT = 3001
+    httpServer.listen(PORT, () => {
+      console.log(`http://localhost:${PORT}${server.graphqlPath}`)
     })
   })

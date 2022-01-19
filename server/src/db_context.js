@@ -1,6 +1,6 @@
 // const { Sequelize, STRING, INTEGER, DATE, Op } = require('sequelize')
 const { DataSource } = require('apollo-datasource')
-const isEmail = require('isemail')
+const { validate } = require('isemail')
 
 /**Класс для работы с БД */
 class DB_API extends DataSource {
@@ -14,7 +14,7 @@ class DB_API extends DataSource {
   }
 
   async findUser({ email } = {}) {
-    if (!email || !isEmail.validate(email)) return null
+    if (!email || !validate(email)) return null
     const user = await this.store.Users.findOne({ where: { email } })
     return user ? user : null
   }
@@ -23,7 +23,7 @@ class DB_API extends DataSource {
   async findOrCreateUser({ email: emailArg } = {}) {
     const email =
       this.context && this.context.user ? this.context.user.email : emailArg
-    if (!email || !isEmail.validate(email)) return null
+    if (!email || !validate(email)) return null
 
     const users = await this.store.Users.findOrCreate({ where: { email } })
     return users && users[0] ? users[0] : null
