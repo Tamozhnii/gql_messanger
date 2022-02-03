@@ -1,4 +1,4 @@
-const { pubsub } = require('./../pubSub')
+import pubsub from './../pubSub'
 /**Преобразователи GQL для запросов */
 const resolvers = {
   Query: {
@@ -28,7 +28,7 @@ const resolvers = {
     },
     sendMessage: async (_, { text }, { dataSources }) => {
       pubsub.publish('MESSAGE_ADDED', { messageAdded: text })
-      return postController.sendMessage(text)
+      // return postController.sendMessage(text)
     },
     editMessage: async (_, { messageId, text }, { dataSources }) => {},
     removeMessage: async (_, { messageId }, { dataSources }) => {},
@@ -41,4 +41,4 @@ const resolvers = {
   // },
 }
 
-module.exports = resolvers
+export default resolvers

@@ -1,22 +1,22 @@
-const { ApolloServer } = require('apollo-server-express')
-const { execute, subscribe } = require('graphql')
-const { SubscriptionServer } = require('subscriptions-transport-ws')
-const { makeExecutableSchema } = require('@graphql-tools/schema')
-const { createServer } = require('http')
-const express = require('express')
+import { ApolloServer } from 'apollo-server-express'
+import { execute, subscribe } from 'graphql'
+import { SubscriptionServer } from 'subscriptions-transport-ws'
+import { makeExecutableSchema } from '@graphql-tools/schema'
+import { createServer } from 'http'
+import express from 'express'
 
-const { validate } = require('isemail')
+import { validate } from 'isemail'
 
-const { DB_API } = require('./db_context')
-const { sequelize } = require('./../models')
+import DB_API from './db_context'
+import db from './../models'
 
-const typeDefs = require('./Schema/TypeDefs')
-const resolvers = require('./Schema/Resolvers')
+import typeDefs from './Schema/TypeDefs'
+import resolvers from './Schema/Resolvers'
 
 const app = express()
 const httpServer = createServer(app)
 
-const store = sequelize.models
+const store = db.sequelize.models
 
 const context = async ({ req }) => {
   /**Достаем токен из header-а запроса */
@@ -33,8 +33,8 @@ const context = async ({ req }) => {
 const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
-  context,
-  dataSources: () => ({ dbAPI: new DB_API({ store }) }),
+  // ...context,
+  // dataSources: () => ({ dbAPI: new DB_API({ store }) }),
 })
 
 const subscriptionServer = SubscriptionServer.create(
@@ -57,6 +57,9 @@ const subscriptionServer = SubscriptionServer.create(
 
 const server = new ApolloServer({
   schema,
+  resolvers,
+  context,
+  dataSources: () => ({ dbAPI: new DB_API({ store }) }),
   plugins: [
     {
       async serverWillStart() {

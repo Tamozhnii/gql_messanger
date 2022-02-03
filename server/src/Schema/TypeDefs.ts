@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server-express')
+import { gql } from 'apollo-server-express'
 
 /**Создание схемы для GQL (определение типов) */
 const typeDefs = gql`
@@ -37,4 +37,4 @@ const typeDefs = gql`
   # Subscriptions
   #-------------
 `
-module.exports = typeDefs
+export default typeDefs

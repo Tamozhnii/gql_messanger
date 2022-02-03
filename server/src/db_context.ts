@@ -1,9 +1,12 @@
 // const { Sequelize, STRING, INTEGER, DATE, Op } = require('sequelize')
-const { DataSource } = require('apollo-datasource')
-const { validate } = require('isemail')
+import { DataSource } from 'apollo-datasource'
+import { validate } from 'isemail'
 
 /**Класс для работы с БД */
 class DB_API extends DataSource {
+  store: any
+  context: any
+
   constructor({ store }) {
     super()
     this.store = store
@@ -13,14 +16,14 @@ class DB_API extends DataSource {
     this.context = config.context
   }
 
-  async findUser({ email } = {}) {
+  async findUser({ email }: any = {}) {
     if (!email || !validate(email)) return null
     const user = await this.store.Users.findOne({ where: { email } })
     return user ? user : null
   }
 
   /**Вход или создание пользователя TODO: Переделать функцию */
-  async findOrCreateUser({ email: emailArg } = {}) {
+  async findOrCreateUser({ email: emailArg }: any = {}) {
     const email =
       this.context && this.context.user ? this.context.user.email : emailArg
     if (!email || !validate(email)) return null
@@ -62,4 +65,4 @@ class DB_API extends DataSource {
   async removeMessage() {}
 }
 
-module.exports = { DB_API }
+export default DB_API
