@@ -42,6 +42,7 @@ const subscriptionServer = SubscriptionServer.create(
     schema,
     execute,
     subscribe,
+
     onConnect(connectionParams, webSocket, context) {
       console.log('Connected!')
     },
@@ -61,15 +62,16 @@ const server = new ApolloServer({
   context,
   dataSources: () => ({ dbAPI: new DB_API({ store }) }),
   plugins: [
-    {
-      async serverWillStart() {
-        return {
-          async drainServer() {
-            subscriptionServer.close()
-          },
-        }
-      },
-    },
+    subscriptionServer.server({ httpServer }),
+    // {
+    //   async serverWillStart() {
+    //     return {
+    //       async drainServer() {
+    //         subscriptionServer.close()
+    //       },
+    //     }
+    //   },
+    // },
   ],
 })
 
