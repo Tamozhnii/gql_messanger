@@ -1,0 +1,46 @@
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  color: String
+  messages: [Message!]!
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type Message {
+  id: ID!
+  createdAt: String!
+  text: String!
+  postedBy: User!
+}
+
+type Feed {
+  messages: [Message!]!
+  total: Int!
+}
+
+type Query {
+  me: User!
+  users(filter: String): [User!]!
+  messages(filter: String, skip: Int, take: Int): Feed!
+}
+
+type Mutation {
+  signup(password: String!, name: String!): AuthPayload
+  login(password: String!): AuthPayload
+  addMessage(text: String!): Message!
+  removeMessage(id: ID!): Message!
+  editMessage(id: ID!, text: String!): Message!
+}
+
+type Subscription {
+  newMessage: Message
+  removeMessage: Message
+  editMessage: Message
+  newUser: User
+  editUser: User
+}
