@@ -21,6 +21,7 @@ type Message {
 type Feed {
   messages: [Message!]!
   total: Int!
+  next: Int!
 }
 
 type Query {
@@ -30,11 +31,12 @@ type Query {
 }
 
 type Mutation {
-  signup(password: String!, name: String!): AuthPayload
-  login(password: String!): AuthPayload
+  signup(password: String!, name: String!, email: String!): AuthPayload
+  login(password: String!, email: String!): AuthPayload
   addMessage(text: String!): Message!
   removeMessage(id: ID!): Message!
   editMessage(id: ID!, text: String!): Message!
+  changeProfile(name: String!, color: String!): User!
 }
 
 type Subscription {

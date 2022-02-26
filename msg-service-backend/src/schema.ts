@@ -28,11 +28,12 @@ const resolvers = {
     },
   },
   Query: {
-    me: (_parent: unknown, _args: {}, context: GraphQLContext) => {
+    me: async (_parent: unknown, _args: {}, context: GraphQLContext) => {
       if (context.currentUser === null) throw new Error('Unauthenticated')
       return context.currentUser
     },
     users: async (_parent: unknown, _args: {}, context: GraphQLContext) => {
+      if (context.currentUser === null) throw new Error('Unauthenticated')
       return context.prisma.user.findMany()
     },
     messages: async (
@@ -40,24 +41,28 @@ const resolvers = {
       args: { filter?: string; skip?: number; take?: number },
       context: GraphQLContext
     ) => {
+      if (context.currentUser === null) throw new Error('Unauthenticated')
+
       const where = args.filter
         ? {
             OR: [{ text: { contains: args.filter } }],
           }
         : {}
 
-      const messages = context.prisma.message.findMany({
+      const messages = await context.prisma.message.findMany({
         where,
         skip: args.skip,
-        take: args.take,
+        take: args.take || 10,
         orderBy: { cteatedAt: Prisma.SortOrder.desc },
       })
 
-      const total = context.prisma.message.count()
+      const total = await context.prisma.message.count({ where })
+      const next = (args.skip || 0) + (args.take || 10)
 
       return {
         messages,
         total,
+        next: next < total ? next : total,
       }
     },
   },
@@ -153,7 +158,7 @@ const resolvers = {
       }
 
       const deletedMessage = await context.prisma.message.delete({
-        where: { id: args.id },
+        where: { id: Number(args.id) },
         include: { postedBy: parent.postedById === context.currentUser.id },
       })
 
@@ -172,7 +177,7 @@ const resolvers = {
 
       const changedMessage = await context.prisma.message.update({
         where: {
-          id: args.id,
+          id: Number(args.id),
         },
         data: { text: args.text },
         include: { postedBy: parent.postedById === context.currentUser.id },

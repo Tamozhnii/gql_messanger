@@ -48,7 +48,7 @@ const main = async () => {
   })
 
   server.listen(8002, '0.0.0.0', () => {
-    console.log('http://localhost:8002/')
+    console.log('http://localhost:8002/graphql')
   })
 }
 
