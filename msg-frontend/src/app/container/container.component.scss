@@ -1,0 +1,42 @@
+$bg_color_block: rgb(40, 22, 47);
+
+.container {
+  display: grid;
+  grid-template-columns: minmax(250px, 20%) repeat(4, minmax(100px, auto));
+  grid-template-rows: 70px repeat(7, auto);
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+  grid-gap: 20px;
+  padding: 20px;
+  .head {
+    overflow: hidden;
+    padding: 10px;
+    grid-column-start: 1;
+    grid-column-end: 6;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    background-color: $bg_color_block;
+  }
+  .sidebar {
+    overflow: hidden;
+    padding: 10px;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 9;
+    background-color: $bg_color_block;
+    app-users {
+      height: 100%;
+      width: 100%;
+    }
+  }
+  .content {
+    overflow: hidden;
+    padding: 10px;
+    grid-column-start: 2;
+    grid-column-end: 6;
+    grid-row-start: 2;
+    grid-row-end: 9;
+    background-color: $bg_color_block;
+  }
+}

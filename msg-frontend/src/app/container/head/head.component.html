@@ -1,0 +1,20 @@
+<div class="head-container">
+  <div class="title">MESSANGER</div>
+  <div>
+    <mat-icon (click)="editProfile($event)">manage_accounts</mat-icon>
+    <mat-icon>logout</mat-icon>
+  </div>
+  <div class="modal" *ngIf="editMode" (click)="editProfile($event)">
+    <form class="form" (click)="onFormClick($event)">
+      <mat-form-field>
+        <input matInput placeholder="Name" type="text" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Color" type="color" />
+      </mat-form-field>
+
+      <button mat-stroked-button>Accept</button>
+    </form>
+  </div>
+</div>

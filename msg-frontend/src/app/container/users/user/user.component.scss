@@ -1,0 +1,27 @@
+.user {
+  display: flex;
+  .avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #adadad;
+    color: rgb(255, 255, 255);
+    font-size: 20px;
+    text-shadow: 1px 1px 1px black;
+    border-radius: 50%;
+    margin: 10px;
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+    min-height: 32px;
+  }
+  .info {
+    margin: 10px;
+    .name {
+      font-size: 22px;
+    }
+    .email {
+      color: rgba(255, 255, 255, 0.644);
+    }
+  }
+}

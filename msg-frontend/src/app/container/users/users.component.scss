@@ -1,0 +1,21 @@
+.user-title {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 10px;
+}
+.user-container {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  max-height: calc(100% - 44px);
+  &::-webkit-scrollbar {
+    background-color: rgb(108, 71, 119);
+    border-radius: 8px;
+    width: 7px;
+    overflow: hidden;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #4c2261;
+    border-radius: 8px;
+  }
+}

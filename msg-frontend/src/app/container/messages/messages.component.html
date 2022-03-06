@@ -1,0 +1,14 @@
+<div class="msg-container">
+  <div class="msgs">
+    <app-message *ngFor="let m of messages" [message]="m"></app-message>
+  </div>
+  <div class="input">
+    <textarea
+      autofocus
+      placeholder="Input text..."
+      rows="5"
+      maxlength="1000"
+    ></textarea>
+    <mat-icon>send</mat-icon>
+  </div>
+</div>

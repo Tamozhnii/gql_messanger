@@ -1,0 +1,12 @@
+<div class="post {{ isMyPost && 'my-post' }}" key="message.id">
+  <div class="post-info">
+    <div class="avatar" [style.backgroundColor]="message.postedBy.color">
+      {{ message.postedBy.name[0].toUpperCase() }}
+    </div>
+    <div class="name">{{ message.postedBy.name }}</div>
+  </div>
+  <div class="post-msg">
+    <div class="date">{{ message.createdAt }}</div>
+    <div class="text">{{ message.text }}</div>
+  </div>
+</div>
