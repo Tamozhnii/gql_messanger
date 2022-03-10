@@ -1,0 +1,14 @@
+.form {
+  height: 300px;
+  background-color: rgb(86, 64, 95);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  flex-direction: column;
+  [class^="mat-form-field"] {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
