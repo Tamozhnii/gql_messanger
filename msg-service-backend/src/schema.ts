@@ -109,7 +109,7 @@ const resolvers = {
     },
     changeProfile: async (
       _parent: unknown,
-      args: { name?: string; color?: string },
+      args: { name: string; color: string },
       context: GraphQLContext
     ) => {
       if (context.currentUser === null) {

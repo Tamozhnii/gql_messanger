@@ -17,15 +17,15 @@ const main = async () => {
 
   server.register(cors, {
     origin: '*',
-    // methods: 'GET, POST, PUT, DELETE, OPTIONS',
-    // allowedHeaders: 'Origin, Content-Type, Accept, Authorization',
-    // credentials: true,
+    methods: 'GET, POST, PUT, DELETE, OPTIONS',
+    allowedHeaders: 'Origin, Content-Type, Accept, Authorization',
+    credentials: true,
   })
 
   server.route({
     method: ['POST', 'GET'],
     url: '/graphql',
-    handler: async (req, reply) => {
+    handler: async (req, res) => {
       const request: Request = {
         headers: req.headers,
         method: req.method,
@@ -33,20 +33,9 @@ const main = async () => {
         body: req.body,
       }
 
-      reply.header('Access-Control-Allow-Origin', '*')
-      reply.header(
-        'Access-Control-Allow-Methods',
-        'GET, POST, PUT, DELETE, OPTIONS'
-      )
-      reply.header(
-        'Access-Control-Allow-Headers',
-        'Origin, Content-Type, Accept, Authorization'
-      )
-      reply.header('Access-Control-Allow-Credentials', 'true')
-
       if (shouldRenderGraphiQL(request)) {
-        reply.header('Content-Type', 'text/html')
-        reply.send(renderGraphiQL({ endpoint: '/graphql' }))
+        res.header('Content-Type', 'text/html')
+        res.send(renderGraphiQL({ endpoint: '/graphql' }))
 
         return
       }
@@ -62,7 +51,18 @@ const main = async () => {
         variables,
       })
 
-      sendResult(result, reply.raw)
+      res.raw.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET, POST, PUT, DELETE, OPTIONS'
+      )
+      res.raw.setHeader(
+        'Access-Control-Allow-Headers',
+        'Origin, Content-Type, Accept, Authorization'
+      )
+      res.raw.setHeader('Access-Control-Allow-Credentials', 'false')
+      res.raw.setHeader('Access-Control-Allow-Origin', '*')
+
+      sendResult(result, res.raw)
     },
   })
 
