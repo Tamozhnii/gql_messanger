@@ -1,20 +1,41 @@
 <div class="head-container">
   <div class="title">MESSANGER</div>
   <div>
-    <mat-icon (click)="editProfile($event)">manage_accounts</mat-icon>
-    <mat-icon>logout</mat-icon>
+    <mat-icon (click)="editProfileMode($event)">manage_accounts</mat-icon>
+    <mat-icon (click)="onExit()">logout</mat-icon>
   </div>
-  <div class="modal" *ngIf="editMode" (click)="editProfile($event)">
-    <form class="form" (click)="onFormClick($event)">
+  <div class="modal" *ngIf="editMode" (click)="editProfileMode($event)">
+    <form class="form" (click)="onFormClick($event)" [formGroup]="form">
       <mat-form-field>
-        <input matInput placeholder="Name" type="text" />
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          placeholder="your name"
+          type="text"
+          formControlName="name"
+        />
+        <mat-error *ngIf="form.controls.name.invalid">
+          {{ getError() }}
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput placeholder="Color" type="color" />
+        <mat-label>Color</mat-label>
+        <input
+          matInput
+          placeholder="#FFFFFF"
+          type="color"
+          formControlName="color"
+        />
       </mat-form-field>
 
-      <button mat-stroked-button>Accept</button>
+      <button
+        mat-stroked-button
+        (click)="handleAccept()"
+        [disabled]="isEmptyEditRows"
+      >
+        Accept
+      </button>
     </form>
   </div>
 </div>

@@ -1,5 +1,5 @@
-import { Apollo, gql } from 'apollo-angular';
-import { Component, OnInit } from '@angular/core';
+import { Apollo } from 'apollo-angular';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-auth',
@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./auth.component.scss'],
 })
 export class AuthComponent implements OnInit {
+  @Input() callback: Function = () => {};
+
   constructor(private apollo: Apollo) {}
 
   isLogin = true;
+
+  routeToLogin = () => {
+    this.isLogin = true;
+  };
 
   ngOnInit(): void {
     //   this.apollo

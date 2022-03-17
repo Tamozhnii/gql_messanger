@@ -1,6 +1,9 @@
 <div class="container">
-  <app-login *ngIf="isLogin; else Registration"></app-login>
-  <ng-template #Registration><app-registration></app-registration></ng-template>
+  <app-login
+    *ngIf="isLogin; else Registration"
+    [callback]="callback"
+  ></app-login>
+  <ng-template #Registration><app-registration [routeToLogin]="routeToLogin"></app-registration></ng-template>
   <button
     mat-button
     size="small"

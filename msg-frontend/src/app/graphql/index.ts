@@ -38,3 +38,21 @@ export const getUsers = gql`
     }
   }
 `;
+
+export const changeProfile = gql`
+  mutation ChangeProfile($name: String!, $color: String!) {
+    changeProfile(name: $name, color: $color) {
+      id
+      name
+      email
+      color
+    }
+  }
+`;
+
+export const newUser = `subscription newUser {
+    id
+    name
+    email
+    color
+  }`;

@@ -1,5 +1,5 @@
 <div class="layout">
-  <app-container *ngIf="!!token; else Auth"></app-container>
-  <ng-template #Auth><app-auth></app-auth></ng-template>
+  <app-container *ngIf="!!token; else Auth" [callback]="check"></app-container>
+  <ng-template #Auth><app-auth [callback]="check"></app-auth></ng-template>
   <notifier-container></notifier-container>
 </div>

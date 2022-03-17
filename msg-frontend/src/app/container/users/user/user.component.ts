@@ -1,5 +1,5 @@
-import { IUser } from '../users.component';
 import { Component, Input, OnInit } from '@angular/core';
+import * as T from 'Types';
 
 @Component({
   selector: 'app-user',
@@ -7,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./user.component.scss'],
 })
 export class UserComponent implements OnInit {
-  @Input() user!: IUser;
+  @Input() user!: T.IUser;
 
   constructor() {}
 

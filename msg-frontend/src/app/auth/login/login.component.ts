@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { NotifierService } from 'angular-notifier';
-import { Apollo, gql } from 'apollo-angular';
-import { getUsers, login } from 'src/app/graphql';
+import { Apollo } from 'apollo-angular';
+import { login } from 'src/app/graphql';
+import * as T from 'Types';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +12,7 @@ import { getUsers, login } from 'src/app/graphql';
 })
 export class LoginComponent implements OnInit {
   private readonly notifier: NotifierService;
+  @Input() callback: Function = () => {};
 
   constructor(
     private apollo: Apollo,
@@ -45,44 +47,18 @@ export class LoginComponent implements OnInit {
         .subscribe(
           ({ data, loading }) => {
             if (data) this.notifier.notify('success', 'Registation success!');
-            console.log(data);
-            console.log(loading);
+            sessionStorage.setItem(
+              'token',
+              (data as T.ILoginResponse).login.token
+            );
+            this.callback();
           },
           (error) => {
             this.notifier.notify('error', error.message);
-            console.log(error);
           }
         );
-      // this.apollo
-      //   .watchQuery({
-      //     query: getUsers,
-      //   })
-      //   .valueChanges.subscribe(({ data, loading, error }) => {
-      //     if (data) this.notifier.notify('success', 'Registation success!');
-      //     if (error) this.notifier.notify('error', error.message);
-      //     console.log(error);
-      //     console.log(data);
-      //     console.log(loading);
-      //   });
     }
   }
 
-  ngOnInit() {
-    // this.apollo
-    //   .watchQuery({
-    //     query: gql`
-    //       {
-    //         rates(currency: "USD") {
-    //           currency
-    //           rate
-    //         }
-    //       }
-    //     `,
-    //   })
-    //   .valueChanges.subscribe((result: any) => {
-    //     // this.rates = result?.data?.rates;
-    //     // this.loading = result.loading;
-    //     // this.error = result.error;
-    //   });
-  }
+  ngOnInit() {}
 }

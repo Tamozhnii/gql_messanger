@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Apollo, gql, QueryRef } from 'apollo-angular';
-import { Subscription } from 'rxjs';
+import { Apollo } from 'apollo-angular';
 import { NotifierService } from 'angular-notifier';
 import { signup } from 'src/app/graphql';
 
@@ -11,9 +10,8 @@ import { signup } from 'src/app/graphql';
   styleUrls: ['./registration.component.scss'],
 })
 export class RegistrationComponent implements OnInit {
+  @Input() routeToLogin: Function = () => {};
   private readonly notifier: NotifierService;
-  // private query: QueryRef<any>;
-  // private querySubscription: Subscription
 
   constructor(
     private apollo: Apollo,
@@ -53,39 +51,14 @@ export class RegistrationComponent implements OnInit {
         .subscribe(
           ({ data, loading }) => {
             if (data) this.notifier.notify('success', 'Registation success!');
-            console.log(data);
-            console.log(loading);
+            this.routeToLogin();
           },
           (error) => {
             this.notifier.notify('error', error.message);
-            console.log(error);
           }
         );
     }
   }
 
-  ngOnInit(): void {
-    // this.query =
-    // this.apollo.watchQuery<any>({
-    //   query: gql`
-    //     {
-    //       rates(currency: "USD") {
-    //         currency
-    //         rate
-    //       }
-    //     }
-    //   `,
-    // });
-    // this.querySubscription = this.query.valueChanges.subscribe(
-    //   ({ data, loading, error }) => {}
-    // );
-  }
-
-  // refresh() {
-  //   this.query.refetch();
-  // }
-
-  // ngOnDestroy() {
-  //   this.querySubscription.unsubscribe();
-  // }
+  ngOnInit(): void {}
 }

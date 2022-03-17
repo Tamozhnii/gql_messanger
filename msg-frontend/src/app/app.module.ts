@@ -5,13 +5,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { InMemoryCache } from '@apollo/client/core';
-import { HttpLink } from 'apollo-angular/http';
-import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { NotifierModule } from 'angular-notifier';
+import { InMemoryCache } from '@apollo/client/core';
+import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
+import { HttpLink } from 'apollo-angular/http';
 
 import { AppComponent } from './app.component';
 import { ContainerComponent } from './container/container.component';
@@ -23,6 +23,12 @@ import { MessageComponent } from './container/messages/message/message.component
 import { UserComponent } from './container/users/user/user.component';
 import { RegistrationComponent } from './auth/registration/registration.component';
 import { LoginComponent } from './auth/login/login.component';
+
+const getToken = () => {
+  const token = sessionStorage.getItem('token');
+  if (token) return `Barear ${token}`;
+  return '';
+};
 
 @NgModule({
   declarations: [
@@ -66,6 +72,7 @@ import { LoginComponent } from './auth/login/login.component';
     }),
     HttpClientModule,
   ],
+  bootstrap: [AppComponent],
   providers: [
     {
       provide: APOLLO_OPTIONS,
@@ -74,6 +81,9 @@ import { LoginComponent } from './auth/login/login.component';
           cache: new InMemoryCache(),
           link: httpLink.create({
             uri: 'http://localhost:8002/graphql',
+            headers: {
+              authorization: getToken(),
+            } as any,
           }),
           defaultOptions: {
             mode: 'no-cors',
@@ -86,6 +96,5 @@ import { LoginComponent } from './auth/login/login.component';
       deps: [HttpLink],
     },
   ],
-  bootstrap: [AppComponent],
 })
 export class AppModule {}

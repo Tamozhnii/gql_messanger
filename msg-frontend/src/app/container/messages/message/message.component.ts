@@ -1,11 +1,10 @@
-import { IUser } from './../../users/users.component';
 import { Component, Input, OnInit } from '@angular/core';
-
+import * as T from 'Types';
 export interface IMessage {
   id: number;
   text: string;
   createdAt: string;
-  postedBy: IUser;
+  postedBy: T.IUser;
 }
 
 @Component({

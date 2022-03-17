@@ -10,6 +10,10 @@ export class AppComponent implements OnInit {
   token: string | null = null;
 
   ngOnInit(): void {
-    this.token = window.localStorage.getItem('token');
+    this.token = sessionStorage.getItem('token');
   }
+
+  check = () => {
+    this.token = sessionStorage.getItem('token');
+  };
 }
