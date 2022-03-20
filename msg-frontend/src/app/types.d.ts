@@ -17,4 +17,11 @@ declare module 'Types' {
       user: IUser;
     };
   }
+
+  interface IMessage {
+    id: number;
+    text: string;
+    createdAt: string;
+    postedBy: IUser;
+  }
 }

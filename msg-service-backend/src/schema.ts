@@ -53,7 +53,7 @@ const resolvers = {
         where,
         skip: args.skip,
         take: args.take || 10,
-        orderBy: { cteatedAt: Prisma.SortOrder.desc },
+        orderBy: { cteatedAt: Prisma.SortOrder.asc },
       })
 
       const total = await context.prisma.message.count({ where })

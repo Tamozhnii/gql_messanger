@@ -29,7 +29,7 @@ export class UsersComponent implements OnInit {
     //   color: '#296907',
     // },
   ];
-  subscribe: { unsubscribe: () => void } = { unsubscribe: () => {} };
+  // subscribe: { unsubscribe: () => void } = { unsubscribe: () => {} };
 
   constructor(private apollo: Apollo) {}
 

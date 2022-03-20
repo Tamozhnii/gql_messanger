@@ -14,6 +14,21 @@ export const signup = gql`
   }
 `;
 
+export const sendMessage = gql`
+  mutation SendMessage($text: String!) {
+    addMessage(text: $text) {
+      id
+      createdAt
+      text
+      postedBy {
+        id
+        name
+        color
+      }
+    }
+  }
+`;
+
 export const login = gql`
   mutation LogIn($password: String!, $email: String!) {
     login(password: $password, email: $email) {
@@ -35,6 +50,25 @@ export const getUsers = gql`
       name
       email
       color
+    }
+  }
+`;
+
+export const getMessages = gql`
+  query {
+    messages {
+      messages {
+        id
+        text
+        postedBy {
+          id
+          name
+          color
+        }
+        createdAt
+      }
+      total
+      next
     }
   }
 `;

@@ -8,7 +8,9 @@
       placeholder="Input text..."
       rows="5"
       maxlength="1000"
+      (change)="onChange($event)"
+      [value]="text"
     ></textarea>
-    <mat-icon>send</mat-icon>
+    <mat-icon (click)="onSend()">send</mat-icon>
   </div>
 </div>
